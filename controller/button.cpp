@@ -115,19 +115,19 @@ namespace uk {
                         color: var(--${0}) !important;
                         border-color: var(--${0});
                     }
-                    .uk-button-hover-${0}:hover {
+                    .uk-button-${0}-hover:hover {
                         background-color: var(--${0}) !important;
                         color: var(--${1}) !important;
                         border-color: var(--${0});
                         opacity: 100% !important;
                     }
-                    .uk-button-hover-${0}-outline:hover {
+                    .uk-button-${0}-hover-outline:hover {
                         background: var(--none) !important;
                         color: var(--${0}) !important;
                         border-color: var(--${0});
                         opacity: 100% !important;
                     }
-                    .uk-button-hover-${0}-opaque:hover {
+                    .uk-button-${0}-hover-opaque:hover {
                         background-color: rgb( from var(--${0}) r g b / 30% );
                         border: 1px solid rgb( from var(--${0}) r g b / 50% );
                     }

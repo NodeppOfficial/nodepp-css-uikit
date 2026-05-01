@@ -1,3 +1,5 @@
+#define EXPRESS_ALLOW_ZLIB_COMPRESSION 0
+
 #include <nodepp/nodepp.h>
 #include <nodepp/worker.h>
 #include <nodepp/query.h>

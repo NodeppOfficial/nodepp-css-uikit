@@ -7,18 +7,18 @@ namespace uk {
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
-            for( auto& size: map_t<string_t,int>({
-               { nullptr,   0 },
-               { "\\@2l",1600 },
-               { "\\@l", 1200 },
-               { "\\@m",  960 },
-               { "\\@s",  640 }
+            for( auto& size: map_t<string_t,string_t>({
+               { nullptr, nullptr },
+               { "\\@2l", "max-width: 1600px" },
+               { "\\@l" , "max-width: 1200px" },
+               { "\\@m" , "max-width: 960px " },
+               { "\\@s" , "max-width: 640px " },
+               { "\\@portrait" , "orientation: portrait"  },
+               { "\\@landscape", "orientation: landscape" }
             }).data() ){
 
-                if( size.first != nullptr ){
-                    data+=( regex::format( _STRING_(
-                       @media( max-width: ${0}px ) {
-                    ), size.second ));
+                if( !size.first.empty() ){
+                    data+=regex::format( "@media(${0}){", size.second );
                 }
 
                 for( auto x=1; x<=12; x++ ){ for( auto y=1; y<=12; y++ ){ if( x >= y ){ continue; }
@@ -29,14 +29,14 @@ namespace uk {
                 }}
 
                 for( auto& item : map_t<string_t,string_t>({
-                    { "none",    "0px"   },
-                    { "2xsmall", "50px"  },
-                    { "xsmall",  "100px" },
-                    { "small",   "150px" },
-                    { "medium",  "300px" },
-                    { "large",   "450px" },
-                    { "xlarge",  "500px" },
-                    { "2xlarge", "550px" },
+                   { "none",    "0px"   },
+                   { "2xsmall", "50px"  },
+                   { "xsmall",  "100px" },
+                   { "small",   "150px" },
+                   { "medium",  "300px" },
+                   { "large",   "450px" },
+                   { "xlarge",  "500px" },
+                   { "2xlarge", "550px" },
                 }).data() ){
                     data+=( regex::format( _STRING_ (
                        .uk-height-${0}${2}     { min-height:${1}; }
@@ -49,22 +49,22 @@ namespace uk {
                    .uk-height-1-1${0}    { min-height: 100%;  }
                 ), size.first ));
 
-                if( size.first != nullptr ){ data+=( "}" ); }
+                if( !size.first.empty() ){ data+=( "}" ); }
 
             }
 
-            for( auto& size: map_t<string_t,int>({
-               { nullptr,   0 },
-               { "\\@2l",1600 },
-               { "\\@l", 1200 },
-               { "\\@m",  960 },
-               { "\\@s",  640 }
+            for( auto& size: map_t<string_t,string_t>({
+               { nullptr, nullptr },
+               { "\\@2l", "max-width: 1600px" },
+               { "\\@l" , "max-width: 1200px" },
+               { "\\@m" , "max-width: 960px " },
+               { "\\@s" , "max-width: 640px " },
+               { "\\@portrait" , "orientation: portrait"  },
+               { "\\@landscape", "orientation: landscape" }
             }).data() ){
 
-                if( size.first != nullptr ){
-                    data+=( regex::format( _STRING_(
-                       @media( max-width: ${0}px ) {
-                    ), size.second ));
+                if( !size.first.empty() ){
+                    data+=regex::format( "@media(${0}){", size.second );
                 }
 
                 for( auto x=1; x<=12; x++ ){ for( auto y=1; y<=12; y++ ){ if( x >= y ){ continue; }
@@ -79,7 +79,7 @@ namespace uk {
                    .uk-child-height-1-1${0}>:not([class*='uk-height'])   { min-height: 100%;  }
                 ), size.first ));
 
-                if( size.first != nullptr ){ data+=( "}" ); }
+                if( !size.first.empty() ){ data+=( "}" ); }
 
             }
 

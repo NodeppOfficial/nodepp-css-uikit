@@ -9,18 +9,18 @@ namespace uk {
 
             data+=( _STRING_( [class*=uk-position]{ position: absolute; }));
 
-            for( auto& size: map_t<string_t,int>({
-                { nullptr,   0 },
-                { "\\@2l",1600 },
-                { "\\@l", 1200 },
-                { "\\@m",  960 },
-                { "\\@s",  640 }
+            for( auto& size: map_t<string_t,string_t>({
+               { nullptr, nullptr },
+               { "\\@2l", "min-width: 1600px" },
+               { "\\@l" , "min-width: 1200px" },
+               { "\\@m" , "min-width: 960px " },
+               { "\\@s" , "min-width: 640px " },
+               { "\\@portrait" , "orientation: portrait"  },
+               { "\\@landscape", "orientation: landscape" }
             }).data() ){
 
-                if( size.first != nullptr ){
-                    data+=( regex::format( _STRING_(
-                       @media( min-width: ${0}px ) {
-                    ), size.second ));
+                if( !size.first.empty() ){
+                    data+=regex::format( "@media(${0}){", size.second );
                 }
 
                 for( auto& item : map_t<string_t,string_t>({
@@ -43,7 +43,7 @@ namespace uk {
                     ), item.first, item.second, size.first ));
                 }
 
-                if( size.first != nullptr ){ data+=( "}" ); }
+                if( !size.first.empty() ){ data+=( "}" ); }
 
             }
 
