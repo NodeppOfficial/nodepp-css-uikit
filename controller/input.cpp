@@ -2,12 +2,11 @@
 
 namespace uk {
 
-    express_tcp_t input() {
-        auto app = express::http::add();
+    express_tcp_t input() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
-            data+=( _STRING_(
+            data+=( NODEPP_STRINGIFY (
 
                 .uk-checkbox:checked { background-image: url( data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2214%22%20height%3D%2211%22%20viewBox%3D%220%200%2014%2011%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22%23fff%22%20points%3D%2212%201%205%207.5%202%205%201%205.5%205%2010%2013%201.5%22%20%2F%3E%0A%3C%2Fsvg%3E%0A ); }
 
@@ -95,7 +94,7 @@ namespace uk {
                 "primary", "secondary", "success",
                 "warning", "danger"   , "mute"   ,
                 "dark"   , "light"    , "neutral"
-            })){ data+=( regex::format( _STRING_(
+            })){ data+=( regex::format( NODEPP_STRINGIFY (
 
                 .uk-radio-checked-${0}:checked, .uk-checkbox-checked-${0}:checked {
                     background-color: var(--${0});

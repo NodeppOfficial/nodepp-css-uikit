@@ -2,8 +2,7 @@
 
 namespace uk { 
 
-    express_tcp_t transform() {
-        auto app = express::http::add();
+    express_tcp_t transform() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
@@ -18,7 +17,7 @@ namespace uk {
                 { "top-center",    "50% 0"     },
                 { "top-left",      "0 0"       }
             }).data() ){
-                data+=( regex::format( _STRING_(
+                data+=( regex::format( NODEPP_STRINGIFY (
                    .uk-transform-origin-${0} { transform-origin: ${1}; }
                 ), item.first, item.second )); 
             }

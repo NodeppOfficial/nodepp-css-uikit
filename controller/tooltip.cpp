@@ -2,8 +2,7 @@
 
 namespace uk { 
 
-    express_tcp_t tooltip() {
-        auto app = express::http::add();
+    express_tcp_t tooltip() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
@@ -18,20 +17,26 @@ namespace uk {
                 { "dark",      "light" },
                 { "neutral",   "light" }
             }).data() ){
-                data+=( regex::format( _STRING_(
-                    .uk-tooltip-${0}-outline { 
+                data+=( regex::format( NODEPP_STRINGIFY (
+
+                    .uk-tooltip-${0}-outline:hover:after { 
                         border-color: var(--${0}); 
                         color: var(--${0}); 
                     } 
+
                     .uk-tooltip-${0}:hover:after { 
                         background-color: var(--${0}); 
                         color: var(--${1}); 
                     }
+
                 ), color.first, color.second ));
             }
 
-            data+=( _STRING_(
-                .uk-tooltip { position: relative; z-index: 1000; }
+            data+=( NODEPP_STRINGIFY (
+
+                .uk-tooltip { position: relative; }
+
+                /*.........................................................................*/
 
                 .uk-tooltip:hover::after {
                     transform: translateX(-50%) translateY(-100%);
@@ -41,6 +46,7 @@ namespace uk {
                     text-align: center;
                     position: absolute;
                     background: var(--neutral);
+                    z-index: 1000;
                     padding:4px 2px;
                     font-size: 12px;
                     min-width: 80px;
@@ -63,12 +69,12 @@ namespace uk {
 
                 .uk-tooltip-left:hover::after {
                     transform: translateX(-100%) translateY(0%) !important;
-                    left: 0%; top: calc( 50% - 15px );
+                    left: -5px; top: calc( 50% - 9px );
                 }
 
                 .uk-tooltip-right:hover::after {
                     transform: translateX(100%) translateY(0%) !important;
-                    left: unset; right: 0px; top: calc( 50% - 15px );
+                    left: unset; right: -5px; top: calc( 50% - 9px );
                 }
 
             ));

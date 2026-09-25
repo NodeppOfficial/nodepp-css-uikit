@@ -2,23 +2,23 @@
 
 namespace uk {
 
-    express_tcp_t margin() {
-        auto app = express::http::add();
+    express_tcp_t margin() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
-            for( auto& size: map_t<string_t,int>({
-                { nullptr,   0 },
-                { "\\@2l",1600 },
-                { "\\@l", 1200 },
-                { "\\@m",  960 },
-                { "\\@s",  640 }
+            for( auto& size: map_t<string_t,string_t>({
+               { nullptr, nullptr },
+               { "\\@2l", "min-width: 1600px" },
+               { "\\@l" , "min-width: 1200px" },
+               { "\\@m" , "min-width: 960px " },
+               { "\\@s" , "min-width: 640px " },
+               { "\\@portrait" , "orientation: portrait"  },
+               { "\\@landscape", "orientation: landscape" },
+               { "\\@mobile"   , "pointer: coarse) and (hover: none" }
             }).data() ){
 
-                if( size.first != nullptr ){
-                    data+=( regex::format( _STRING_(
-                       @media( min-width: ${0}px ) {
-                    ), size.second ));
+                if( !size.first.empty() ){
+                    data+=regex::format( "@media(${0}){", size.second );
                 }
 
                 for( auto& item : map_t<string_t,string_t>({
@@ -31,13 +31,13 @@ namespace uk {
                     { "xlarge",  "35px" },
                     { "2xlarge", "40px" }
                 }).data() ){
-                    data+=( regex::format( _STRING_ (
+                    data+=( regex::format( NODEPP_STRINGIFY  (
                        .uk-child-margin-${0}${2}>:not([class*="uk-margin"]){ margin:${1} !important; }
                        .uk-margin-${0}${2}                                 { margin:${1} !important; }
                     ), item.first, item.second, size.first ));
                 }
 
-                data+=( regex::format( _STRING_ (
+                data+=( regex::format( NODEPP_STRINGIFY  (
 
                     .uk-child-margin${0}>:not([class*="uk-margin"]){ margin:20px; }
                     .uk-margin${0}                                 { margin:20px; }
@@ -66,7 +66,7 @@ namespace uk {
 
                 ), size.first ));
 
-                if( size.first != nullptr ){ data+=( "}" ); }
+                if( !size.first.empty() ){ data+=( "}" ); }
 
             }
 

@@ -2,8 +2,7 @@
 
 namespace uk {
 
-    express_tcp_t badge() {
-        auto app = express::http::add();
+    express_tcp_t badge() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
@@ -18,7 +17,7 @@ namespace uk {
                 { "dark",      "light" },
                 { "neutral",   "light" },
             }).data() ){
-                data+=( regex::format( _STRING_(
+                data+=( regex::format( NODEPP_STRINGIFY (
                     .uk-badge-${0}-outline {
                         border-color: var(--${0}) !important;
                         color: var(--${0}) !important;
@@ -30,7 +29,7 @@ namespace uk {
                 ), color.first, color.second ));
             }
 
-            data+=( _STRING_(
+            data+=( NODEPP_STRINGIFY (
                 .uk-badge {
                     border: 1px solid var(--none);
                     align-content: center;

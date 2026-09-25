@@ -2,10 +2,9 @@
 
 namespace uk {
 
-    express_tcp_t root() {
-        auto app = express::http::add();
+    express_tcp_t root() { auto app = express::http::add();
 
-        app.ALL([=]( express_http_t cli ){ cli.send( _STRING_ (
+        app.ALL([=]( express_http_t cli ){ cli.send( NODEPP_STRINGIFY (
 
             @font-face {
                 font-family: "emoji"; src: local("Segoe UI")        , local("Segoe UI Symbol")  , 
@@ -93,9 +92,8 @@ namespace uk {
             .uk-inline {
                 -webkit-backface-visibility: hidden;
                 vertical-align: middle;
-                display: inline-block;
+                display : inline-block;
                 position: relative;
-                max-width: 100%;
             }
 
             /*.........................................................................*/

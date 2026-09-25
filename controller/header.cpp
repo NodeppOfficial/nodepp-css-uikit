@@ -2,8 +2,7 @@
 
 namespace uk { 
 
-    express_tcp_t header() {
-        auto app = express::http::add();
+    express_tcp_t header() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
@@ -15,7 +14,7 @@ namespace uk {
                 { "h4", "font-size: medium    !important; line-height: 1.4;" },
                 { "h5", "font-size: unset     !important; line-height: 1.4;" },
                 { "h6", "font-size: unset     !important; line-height: 1.4;" },
-            }).data() ){ data+=( regex::format( _STRING_(
+            }).data() ){ data+=( regex::format( NODEPP_STRINGIFY (
 
                 ${0}, .uk-${0}{ ${1} }
 

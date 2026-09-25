@@ -2,12 +2,11 @@
 
 namespace uk {
 
-    express_tcp_t animation() {
-        auto app = express::http::add();
+    express_tcp_t animation() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ 
             
-            cli.send( _STRING_(
+            cli.send( NODEPP_STRINGIFY (
             
                 [class*="uk-animation"] { animation: 0.5s ease-out both; }
 
@@ -32,6 +31,9 @@ namespace uk {
                     animation-timing-function: linear;
                 }
 
+                /* Spin */
+                [animation="spin"]      { animation-name: uk-spin; }
+
                 /* Scale */
                 [animation="scale-up"]  { animation-name: uk-fade, uk-scale-up;   }
                 [animation="scale-down"]{ animation-name: uk-fade, uk-scale-down; }
@@ -53,6 +55,12 @@ namespace uk {
                 [animation="slide-left-medium"]  { animation-name: uk-fade, uk-slide-left-medium;   }
                 [animation="slide-right-medium"] { animation-name: uk-fade, uk-slide-right-medium;  }
                 [animation="slide-bottom-medium"]{ animation-name: uk-fade, uk-slide-bottom-medium; }
+
+                /* Slide Medium */
+                [animation="slide-top-large"]   { animation-name: uk-fade, uk-slide-top-large;    }
+                [animation="slide-left-large"]  { animation-name: uk-fade, uk-slide-left-large;   }
+                [animation="slide-right-large"] { animation-name: uk-fade, uk-slide-right-large;  }
+                [animation="slide-bottom-large"]{ animation-name: uk-fade, uk-slide-bottom-large; }
 
                 /* -- -- -- */
 
@@ -78,6 +86,12 @@ namespace uk {
                 /* -- -- -- */
 
                 .uk-animation-toggle:not(:hover):not(:focus) [class*="uk-animation"] { animation-name: none; }
+
+                /* Spin */
+                @keyframes uk-spin {
+                    0%   { transform: rotate(  0deg); transform-origin: 50% 50%; }
+                    100% { transform: rotate(360deg); transform-origin: 50% 50%; }
+                }
 
                 /* Fade */
                 @keyframes uk-fade {
@@ -137,18 +151,37 @@ namespace uk {
 
                 /* Slide Medium */
                 @keyframes uk-slide-top-medium {
-                    0%   { transform: translateY(-50px); }
+                    0%   { transform: translateY(-25px); }
                     100% { transform: translateY(0); }
                 }
                 @keyframes uk-slide-bottom-medium {
-                    0%   { transform: translateY(50px); }
+                    0%   { transform: translateY(25px); }
                     100% { transform: translateY(0); }
                 }
                 @keyframes uk-slide-left-medium {
-                    0%   { transform: translateX(-50px); }
+                    0%   { transform: translateX(-25px); }
                     100% { transform: translateX(0); }
                 }
                 @keyframes uk-slide-right-medium {
+                    0%   { transform: translateX(25px); }
+                    100% { transform: translateX(0); }
+                }
+
+
+                /* Slide large */
+                @keyframes uk-slide-top-large {
+                    0%   { transform: translateY(-50px); }
+                    100% { transform: translateY(0); }
+                }
+                @keyframes uk-slide-bottom-large {
+                    0%   { transform: translateY(50px); }
+                    100% { transform: translateY(0); }
+                }
+                @keyframes uk-slide-left-large {
+                    0%   { transform: translateX(-50px); }
+                    100% { transform: translateX(0); }
+                }
+                @keyframes uk-slide-right-large {
                     0%   { transform: translateX(50px); }
                     100% { transform: translateX(0); }
                 }

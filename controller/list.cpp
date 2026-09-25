@@ -2,12 +2,11 @@
 
 namespace uk {
 
-    express_tcp_t list() {
-        auto app = express::http::add();
+    express_tcp_t list() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
 
-            data+=( regex::format( _STRING_(
+            data+=( regex::format( NODEPP_STRINGIFY (
 
                 .uk-list-striped > *                 { padding: 8px 10px; margin: 0px !important; }
                 .uk-list-striped > :nth-of-type(odd) { background: var(--neutral); }
@@ -41,7 +40,7 @@ namespace uk {
                 "primary", "secondary", "success",
                 "warning", "danger"   , "mute"   ,
                 "dark"   , "light"    , "neutral"
-            })){ data+=( regex::format( _STRING_(
+            })){ data+=( regex::format( NODEPP_STRINGIFY (
                 .uk-list-divider-${0} > :nth-child(n+2) {
                     border-top:  1px solid var(--${0});
                     padding-top: 10px;
@@ -60,7 +59,7 @@ namespace uk {
                 { "light",     "var(--dark)"  },
                 { "neutral",   "var(--light)" },
                 { "none",      "inherit"      }
-            }).data() ){ data+=( regex::format( _STRING_(
+            }).data() ){ data+=( regex::format( NODEPP_STRINGIFY (
                .uk-list-striped-${0} > :nth-of-type(odd) { background-color: var(--${0}); color: ${1}; }
             ), color.first, color.second )); }
 
