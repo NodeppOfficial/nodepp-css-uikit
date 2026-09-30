@@ -2,25 +2,27 @@
 
 namespace uk {
 
-    express_tcp_t position() {
-        auto app = express::http::add();
+    express_tcp_t position() { auto app = express::http::add();
 
-        app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
+        app.ALL([=]( express_http_t cli ){ cli.send(); queue_t<string_t> data;
 
-            data+=( _STRING_( [class*=uk-position]{ position: absolute; }));
+            data.push( NODEPP_STRINGIFY ( [class*=uk-position]{ position: absolute; }));
 
-            for( auto& size: map_t<string_t,int>({
-                { nullptr,   0 },
-                { "\\@2l",1600 },
-                { "\\@l", 1200 },
-                { "\\@m",  960 },
-                { "\\@s",  640 }
+            for( auto& size: map_t<string_t,string_t>({
+               { nullptr, nullptr },
+               { "\\@2l", "min-width: 1600px" },
+               { "\\@l" , "min-width: 1200px" },
+               { "\\@m" , "min-width: 960px " },
+               { "\\@s" , "min-width: 640px " },
+               { "\\@portrait" , "orientation: portrait"  },
+               { "\\@landscape", "orientation: landscape" },
+               { "\\@mobile"   , "pointer: coarse) and (hover: none" },
+               { "\\@desktop"  , "pointer: fine  ) and (hover: none" },
+               { "\\@console"  , "pointer: none  ) and (hover: none" }
             }).data() ){
 
-                if( size.first != nullptr ){
-                    data+=( regex::format( _STRING_(
-                       @media( min-width: ${0}px ) {
-                    ), size.second ));
+                if( !size.first.empty() ){
+                    data.push( regex::format( "@media(${0}){", size.second ) );
                 }
 
                 for( auto& item : map_t<string_t,string_t>({
@@ -38,16 +40,16 @@ namespace uk {
                     { "absolute"    ,"position: absolute !important;"            },
                     { "sticky"      ,"position: sticky   !important; top: 20px;" }
                 }).data() ){
-                    data+=( regex::format( _STRING_(
+                    data.push( regex::format( NODEPP_STRINGIFY (
                        .uk-position-${0}${2} { ${1} }
                     ), item.first, item.second, size.first ));
                 }
 
-                if( size.first != nullptr ){ data+=( "}" ); }
+                if( !size.first.empty() ){ data.push( "}" ); }
 
             }
 
-            cli.write( data );
+            cli.write( string::join( data, "\n" ) );
 
         });
 

@@ -1,76 +1,85 @@
 #pragma once
 
-namespace uk { express_tcp_t scroll() {
-    auto app = express::http::add();
+namespace uk { express_tcp_t scroll() { auto app = express::http::add();
 
-    app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
+    app.ALL([=]( express_http_t cli ){ cli.send(); queue_t<string_t> data;
 
-        data+=( _STRING_(
+        data.push( NODEPP_STRINGIFY (
 
-            * { scrollbar-width: none; }
-
-            ::-webkit-scrollbar {
+            *:not([class*='uk-scroll']) { scrollbar-width: none; }
+            *:not([class*='uk-scroll'])::-webkit-scrollbar {
                 background: transparent;
                 width: 0; height: 0;
             }
 
         ));
 
-        data+=(_STRING_(
+        for( auto& size: map_t<string_t,string_t>({
+           { nullptr, nullptr },
+           { "\\@portrait" , "orientation: portrait"  },
+           { "\\@landscape", "orientation: landscape" },
+           { "\\@mobile"   , "pointer: coarse) and (hover: none" },
+           { "\\@desktop"  , "pointer: fine  ) and (hover: none" },
+           { "\\@console"  , "pointer: none  ) and (hover: none" }
+        }).data() ){
 
-            .uk-scroll-x::-webkit-scrollbar {
-                height: 0.3em;
-                width:  0.0em;
+            if( !size.first.empty() ){
+                data.push( regex::format( "@media(${0}){", size.second ) );
             }
 
-            .uk-scroll-x {
-                scrollbar-height: 0.3em;
-                scrollbar-width:  0.0em;
-            }
+            data.push( regex::format( NODEPP_STRINGIFY (
 
-            .uk-scroll-y::-webkit-scrollbar {
-                height: 0.0em;
-                width:  0.3em;
-            }
-
-            .uk-scroll-y {
-                scrollbar-height: 0.0em;
-                scrollbar-width:  0.3em;
-            }
-
-            .uk-scroll::-webkit-scrollbar {
-                height: 0.3em;
-                width:  0.3em;
-            }
-
-            .uk-scroll {
-                scrollbar-height: 0.3em;
-                scrollbar-width:  0.3em;
-            }
-
-        ));
-
-        for( auto& color : array_t<string_t>({
-             "primary", "secondary", "success",
-             "warning", "danger"   , "mute"   ,
-             "light"  , "dark"     , "neutral"
-        })){
-            data+=( regex::format( _STRING_(
-
-                .uk-scroll-${0}::-webkit-scrollbar-thumb {
-                    background-color: var(--${0});
+                .uk-scroll-hidden${0} { scrollbar-width: none; }
+                .uk-scroll-hidden${0} ::-webkit-scrollbar {
+                    background: transparent;
+                    height: 0 ; width: 0; 
                 }
 
-                .uk-scroll-${0} {
-                    scrollbar-color: var(--${0}) transparent;
+                .uk-scroll-x${0} {
+                    scrollbar-height: 0.3em;
+                    scrollbar-width:  0.0em;
                 }
 
-            ), color ));
-        }
+                .uk-scroll-y${0} {
+                    scrollbar-height: 0.0em;
+                    scrollbar-width:  0.3em;
+                }
 
-        cli.write( data );
+                .uk-scroll${0} {
+                    scrollbar-height: 0.3em;
+                    scrollbar-width:  0.3em;
+                }
 
-    });
+                .uk-scroll-x${0}::-webkit-scrollbar { height: 0.3em; width: 0.0em; }
+                .uk-scroll-y${0}::-webkit-scrollbar { height: 0.0em; width: 0.3em; }
+                .uk-scroll${0}::-webkit-scrollbar   { height: 0.3em; width: 0.3em; }
 
-    return app;
+            ), size.first ));
+
+            for( auto& color : array_t<string_t>({
+                "primary", "secondary", "success",
+                "warning", "danger"   , "mute"   ,
+                "light"  , "dark"     , "neutral"
+            })){ 
+                
+                data.push( regex::format( NODEPP_STRINGIFY (
+
+                    .uk-scroll-${0}${1}::-webkit-scrollbar-thumb {
+                        background-color: var(--${0});
+                    }
+
+                    .uk-scroll-${0}${1} {
+                        scrollbar-color: var(--${0}) transparent;
+                    }
+
+                ), color, size.first )); 
+        
+            }
+
+            if( !size.first.empty() ){ data.push( "}" ); }
+        
+        } cli.write( string::join( data, "\n" ) );
+
+    }); return app;
+
 }}

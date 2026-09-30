@@ -2,11 +2,10 @@
 
 namespace uk { 
 
-    express_tcp_t index() {
-        auto app = express::http::add();
+    express_tcp_t index() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ 
-            cli.send( _STRING_(
+            cli.send( NODEPP_STRINGIFY (
                 .uk-index-top-most   { z-index: 2001; }
                 .uk-index-top        { z-index: 1001; }
                 .uk-index-normal     { z-index:    0; }
@@ -15,7 +14,6 @@ namespace uk {
             ));
         });
 
-        return app;
-    }
+    return app; }
 
 }

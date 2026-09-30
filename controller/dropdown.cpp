@@ -2,12 +2,11 @@
 
 namespace uk { 
 
-    express_tcp_t dropdown() {
-        auto app = express::http::add();
+    express_tcp_t dropdown() { auto app = express::http::add();
 
         app.ALL([=]( express_http_t cli ){ 
             
-            cli.send( _STRING_(
+            cli.send( NODEPP_STRINGIFY (
 
                 .uk-dropdown-hover:hover>[toggle], .uk-dropdown:has(:checked)>[toggle], .uk-dropdown>[toggle]:hover {
                     position: absolute; flex-direction: column; display: flex;

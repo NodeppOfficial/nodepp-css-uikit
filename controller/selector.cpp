@@ -2,12 +2,11 @@
 
 namespace uk {
 
-    express_tcp_t selector() {
-        auto app = express::http::add();
+    express_tcp_t selector() { auto app = express::http::add();
 
-        app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
+        app.ALL([=]( express_http_t cli ){ cli.send(); queue_t<string_t> data;
 
-            data+=( _STRING_(
+            data.push( NODEPP_STRINGIFY (
                 .uk-selector>label>input[type*="radio"] {
                     display: none;
                 }
@@ -41,7 +40,7 @@ namespace uk {
                 { "dark",      "light" },
                 { "light",     "dark"  },
                 { "neutral",   "light" }
-            }).data() ){ data+=( regex::format( _STRING_(
+            }).data() ){ data.push( regex::format( NODEPP_STRINGIFY (
 
                 .uk-selector-active-${0}-outline>label:has(:checked) {
                     background-color: rgba( from var(--${0}) r g b / 10% ) !important;
@@ -78,7 +77,7 @@ namespace uk {
 
             ), color.first, color.second )); }
 
-            cli.write( data );
+            cli.write( string::join( data, "\n" ) );
 
         });
 

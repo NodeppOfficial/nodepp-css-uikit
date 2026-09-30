@@ -2,10 +2,9 @@
 
 namespace uk { 
 
-    express_tcp_t header() {
-        auto app = express::http::add();
+    express_tcp_t header() { auto app = express::http::add();
 
-        app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
+        app.ALL([=]( express_http_t cli ){ cli.send(); queue_t<string_t> data;
 
             for( auto& item: map_t<string_t,string_t>({
                 { "h0", "font-size: xxx-large !important; line-height: 1.2;" },
@@ -15,7 +14,7 @@ namespace uk {
                 { "h4", "font-size: medium    !important; line-height: 1.4;" },
                 { "h5", "font-size: unset     !important; line-height: 1.4;" },
                 { "h6", "font-size: unset     !important; line-height: 1.4;" },
-            }).data() ){ data+=( regex::format( _STRING_(
+            }).data() ){ data.push( regex::format( NODEPP_STRINGIFY (
 
                 ${0}, .uk-${0}{ ${1} }
 
@@ -27,7 +26,7 @@ namespace uk {
 
             ), item.first, item.second )); }
 
-            cli.write( data );
+            cli.write( string::join( data, "\n" ) );
             
         });
 

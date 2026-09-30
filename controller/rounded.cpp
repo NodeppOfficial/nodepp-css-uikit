@@ -2,10 +2,9 @@
 
 namespace uk { 
 
-    express_tcp_t rounded() {
-        auto app = express::http::add();
+    express_tcp_t rounded() { auto app = express::http::add();
 
-        app.ALL([=]( express_http_t cli ){ cli.send(); string_t data;
+        app.ALL([=]( express_http_t cli ){ cli.send(); queue_t<string_t> data;
 
             for( auto& item : map_t<string_t,string_t>({
                 { "none",    "0px"  },
@@ -17,13 +16,13 @@ namespace uk {
                 { "xlarge",  "30px" },
                 { "2xlarge", "35px" }
             }).data() ){
-                data+=( regex::format( _STRING_(
+                data.push( regex::format( NODEPP_STRINGIFY (
                    .uk-rounded-hover-${0}:hover { border-radius: ${1}; }
                    .uk-rounded-${0}             { border-radius: ${1}; }
                 ), item.first, item.second ));
             }
 
-            data+=( _STRING_ ( 
+            data.push( NODEPP_STRINGIFY  ( 
 
                 .uk-rounded-hover-phill:hover { border-radius: 500px; }
                 .uk-rounded-phill             { border-radius: 500px; }
@@ -60,7 +59,7 @@ namespace uk {
                 
             ));
 
-            cli.write( data );
+            cli.write( string::join( data, "\n" ) );
 
         });
 

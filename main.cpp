@@ -1,3 +1,5 @@
+#define EXPRESS_ALLOW_ZLIB_COMPRESSION 0
+
 #include <nodepp/nodepp.h>
 #include <nodepp/worker.h>
 #include <nodepp/query.h>
@@ -8,7 +10,7 @@
 
 using namespace nodepp;
 
-#include "./controller/controller.cpp"
+#include "./controller/main.cpp"
 
 void clients() {
 
@@ -37,30 +39,30 @@ void clients() {
 
 }
 
-void compile() {
-
-    if( process::is_child() ){ throw 0; }
+void compile() { do { if( process::is_child() ){ break; }
 
     auto app = express::http::add();
 
-    app.ALL([=]( express_http_t cli ){
+    app.USE([=]( express_http_t cli, function_t<void> next ){
         console::log( "->", cli.path );
-    }); uk::controller( app );
+    next(); }); 
+    
+    app.USE( uk::controller() );
 
-    app.listen( "0.0.0.0", 8000, []( ... ){
+    app.listen( "0.0.0.0", 8000, []( socket_t /*unused*/ ){
         console::log( "-> http://localhost:8000" );
         worker::add([=](){ clients(); return -1; });
     });
 
-}
+} while(0); }
 
 void test() {
 
     auto app = express::http::add();
 
-    app.ALL([=]( express_http_t cli ){
+    app.USE([=]( express_http_t cli, function_t<void> next ){
         console::log( "->", cli.path );
-    });
+    next(); });
 
     app.USE( express::http::file( "./www" ) );
 

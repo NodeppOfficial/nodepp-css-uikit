@@ -1,4 +1,5 @@
 #pragma once
+
 #include "./gap.cpp"
 #include "./root.cpp"
 #include "./flex.cpp"
@@ -14,6 +15,7 @@
 #include "./height.cpp"
 #include "./border.cpp"
 #include "./margin.cpp"
+#include "./cursor.cpp"
 #include "./button.cpp"
 #include "./toggle.cpp"
 #include "./scroll.cpp"
@@ -32,8 +34,8 @@
 
 namespace uk {
 
-    template< class T >
-    void controller( T& app ) {
+    express_tcp_t controller() { auto app = express::http::add();
+
         app.USE( "gap",        gap()        );
         app.USE( "root",       root()       );
         app.USE( "flex",       flex()       );
@@ -52,6 +54,7 @@ namespace uk {
         app.USE( "toggle",     toggle()     );
         app.USE( "scroll",     scroll()     );
         app.USE( "margin",     margin()     );
+        app.USE( "cursor",     cursor()     );
         app.USE( "opacity",    opacity()    );
         app.USE( "padding",    padding()    );
         app.USE( "rounded",    rounded()    );
@@ -64,6 +67,7 @@ namespace uk {
         app.USE( "transform",  transform()  );
         app.USE( "background", background() );
         app.USE( "visibility", visibility() );
-    }
+
+    return app; }
 
 }
